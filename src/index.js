@@ -1,15 +1,36 @@
-import React from 'react';
+import React , {Component} from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { List, Button } from 'semantic-ui-react';
+import FolderList from './components/FolderList';
 
-import App from './components/app';
-import reducers from './reducers';
+class App extends Component {
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+	constructor(props){
+		super(props);
+		this.state = {
+			folders: {
+				'folder-1-0': 'src'
+				
+			}
+		}
+	}
 
-ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
-  </Provider>
-  , document.querySelector('.container'));
+	addFolder = (folder, level) => {
+		var timestamp = (new Date()).getTime();
+		this.state.folders['folder-'+timestamp+'-'+level] = folder;
+		console.log(this.state.folders);
+		this.setState({folders: this.state.folders});
+	}
+
+
+	render(){
+		return (
+			<div>
+			<FolderList folders={this.state.folders} addFolder={this.addFolder}/>
+			</div>
+		)
+	}
+}
+
+
+ReactDOM.render(<App />, document.querySelector('.container'));
